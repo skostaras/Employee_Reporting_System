@@ -8,6 +8,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.stefanosk27.reporting.Gender;
+
 @Table(name = "Employee")
 @Entity
 public class Employee implements Serializable {
@@ -32,10 +34,65 @@ public class Employee implements Serializable {
 	private String email;
 	
 	@Column(name="gender", nullable = true)
-	private LocalDate gender;
+	private Gender gender;
 	
 	@Column(name="title", nullable = true)
 	private String title;
+	
+
+	public Integer getEmployeeId() {
+		return employeeId;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public Gender getGender() {
+		return gender;
+	}
+
+	public void setGender(Gender gender) {
+		this.gender = gender;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	
+	
 	
 	
 
