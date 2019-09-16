@@ -23,6 +23,9 @@ public interface ReportRepository extends JpaRepository<Report, Integer> {
 	//	Page<Report> findByPriority(String priority);
 //	Page<Report> findByPriority(String priority, Pageable pageable);
 
-//	Page<Report> findByEmployeeId(Integer employeeId, Pageable pageable);
+	@Query(value = "SELECT * FROM Report WHERE username = ?1", nativeQuery = true)
+	Report findByEmployeeUsername(String username);
+//	Page<Report> findByEmployeeUsername(Integer employeeId, Pageable pageable);
+	
 
 }

@@ -32,9 +32,9 @@ public class Report implements Serializable {
 	private Integer reportId;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "EmployeeId", nullable = false)
+	@JoinColumn(name = "username", nullable = false)
 	@OnDelete(action = OnDeleteAction.CASCADE)
-	@JsonIgnore
+//	@JsonIgnore
 	private Employee employee;
 
 	@Column(name = "Title", nullable = false)

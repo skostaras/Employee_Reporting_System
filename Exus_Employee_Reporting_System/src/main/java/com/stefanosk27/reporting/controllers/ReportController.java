@@ -43,6 +43,11 @@ public class ReportController {
 //	public Page<Report> findByEmployeeId(@PathVariable Integer employeeId, Pageable pageable) {
 //		return reportRepository.findByEmployeeId(employeeId, pageable);
 //	}
+	
+	@GetMapping(value = "/reports/employees/{username}")
+	public Report findByEmployeeUsername(@PathVariable String username) {
+		return reportRepository.findByEmployeeUsername(username);
+	}
 
 	@GetMapping(value = "/employees/reports/{priority}")
 	public Report findByPriority(@PathVariable String priority) {
@@ -58,13 +63,13 @@ public class ReportController {
 		return reportRepository.findByPriority(priority);
 	}
 
-	@PostMapping(value = "/employees/{employeeId}/reports")
+	@PostMapping(value = "/reports/employees/{username}")
 	@ResponseStatus(code = HttpStatus.CREATED)
-	public Report save(@PathVariable Integer employeeId, @RequestBody Report report) {
-		return employeeRepository.findById(employeeId).map(employee -> {
+	public Report save(@PathVariable String username, @RequestBody Report report) {
+		return employeeRepository.findByUsername(username).map(employee -> {
 			report.setEmployee(employee);
 			return reportRepository.save(report);
-		}).orElseThrow(() -> new ResourceNotFoundException(ErrorMessage.EMPLOYEE_NOT_FOUND.getValue() + employeeId));
+		}).orElseThrow(() -> new ResourceNotFoundException(ErrorMessage.EMPLOYEE_NOT_FOUND.getValue() + username));
 
 	}
 

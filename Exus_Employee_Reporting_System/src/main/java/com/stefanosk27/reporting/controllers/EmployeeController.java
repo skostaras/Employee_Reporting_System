@@ -44,11 +44,13 @@ public class EmployeeController {
 	}
 
 	@GetMapping(value = "/employees/{username}")
-	public Page<Employee> findByUsername(@PathVariable String username, Pageable pageable) {
+//	public Page<Employee> findByUsername(@PathVariable String username, Pageable pageable) {
+	public Employee findByUsername(@PathVariable String username) {
 		// TODO why doesn;t work?
 		// () -> new ResourceNotFoundException("Can't find an employee with the
 		// username: " + username + ".")
-		return employeeRepository.findByUsername(username, pageable);
+		return employeeRepository.findByUsername(username).orElseThrow(() -> new ResourceNotFoundException(ErrorMessage.EMPLOYEE_NOT_FOUND.getValue() + username));
+//		return employeeRepository.findByUsername(username, pageable);
 	}
 
 	@PostMapping(value = "/employees")
