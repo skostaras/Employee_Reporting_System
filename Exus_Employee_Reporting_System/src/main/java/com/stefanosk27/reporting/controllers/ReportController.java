@@ -65,11 +65,13 @@ public class ReportController {
 
 	@PostMapping(value = "/reports/employees/{username}")
 	@ResponseStatus(code = HttpStatus.CREATED)
-	public Report save(@PathVariable String username, @RequestBody Report report) {
-		return employeeRepository.findByUsername(username).map(employee -> {
+	public Page<Report> save(@PathVariable String username, @RequestBody Report report) {
+		//TODO pageable
+		return employeeRepository.findByUsername(username, null).map(employee -> {
 			report.setEmployee(employee);
 			return reportRepository.save(report);
-		}).orElseThrow(() -> new ResourceNotFoundException(ErrorMessage.EMPLOYEE_NOT_FOUND.getValue() + username));
+		});
+//				.orElseThrow(() -> new ResourceNotFoundException(ErrorMessage.EMPLOYEE_NOT_FOUND.getValue() + username));
 
 	}
 

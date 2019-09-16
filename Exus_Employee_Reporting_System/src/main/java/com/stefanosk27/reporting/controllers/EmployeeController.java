@@ -18,12 +18,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.stefanosk27.reporting.ErrorMessage;
 import com.stefanosk27.reporting.Gender;
 import com.stefanosk27.reporting.ResourceNotFoundException;
+import com.stefanosk27.reporting.StorageFailedException;
 import com.stefanosk27.reporting.domain.Employee;
 import com.stefanosk27.reporting.repositories.EmployeeRepository;
 import com.stefanosk27.reporting.services.EmployeeService;
@@ -33,64 +36,47 @@ public class EmployeeController {
 
 	@Autowired
 	EmployeeRepository employeeRepository;
-	
 
-    @Autowired
-    private EmployeeService employeeService;
+	@Autowired
+	private EmployeeService employeeService;
 
-	@GetMapping(value = "/employees")
+	@GetMapping(value = "/employees/all")
 	public Page<Employee> all(Pageable pageable) {
+
+		Page<Employee> results = employeeRepository.findAll(pageable);
+		if (results.isEmpty())
+			throw new ResourceNotFoundException(ErrorMessage.EMPLOYEES_NOT_FOUND.getValue());
+
 		return employeeRepository.findAll(pageable);
 	}
 
-	@GetMapping(value = "/employees/{username}")
-//	public Page<Employee> findByUsername(@PathVariable String username, Pageable pageable) {
-	public Employee findByUsername(@PathVariable String username) {
-		// TODO why doesn;t work?
-		// () -> new ResourceNotFoundException("Can't find an employee with the
-		// username: " + username + ".")
-		return employeeRepository.findByUsername(username).orElseThrow(() -> new ResourceNotFoundException(ErrorMessage.EMPLOYEE_NOT_FOUND.getValue() + username));
-//		return employeeRepository.findByUsername(username, pageable);
+	@GetMapping(value = "/employees")
+	@ResponseBody
+	public Page<Employee> findByUsername(@RequestParam String username, Pageable pageable) {
+
+		Page<Employee> results = employeeRepository.findByUsername(username, pageable);
+		if (results.isEmpty())
+			throw new ResourceNotFoundException(ErrorMessage.EMPLOYEE_NOT_FOUND.getValue() + username);
+
+		return employeeRepository.findByUsername(username, pageable);
 	}
 
 	@PostMapping(value = "/employees")
 	@ResponseStatus(code = HttpStatus.CREATED)
 	public Employee save(@RequestBody Employee employee) {
+		Optional<Employee> searchResults = employeeRepository.findByUsername(employee.getUsername());
+		
+		if(searchResults.isPresent())
+			throw new StorageFailedException(employee.getUsername() + ErrorMessage.USERNAME_EXISTS.getValue());
+		
+		
 		return employeeRepository.save(employee);
 	}
 
-//	@PutMapping(value = "/employees/{employeeId}")
-//	public ResponseEntity<?> updateEmployee(@PathVariable Integer employeeId, @RequestBody Employee employee) {
-//		employee.setEmployeeId(employeeId);
-//		Optional<Employee> editedEmployee = employeeService.updateEmployee(employee);
-//		editedEmployee.get().setEmployeeId(employeeId);
-//		employeeRepository.save(editedEmployee);
-//		return ResponseEntity.ok().body(editedEmployee);
-//	}
-
-//	private static void copyNonNullProperties(Object src, Object target) {
-//		BeanUtils.copyProperties(src, target, getNullPropertyNames(src));
-//	}
-//
-//	private static String[] getNullPropertyNames(Object source) {
-//		final BeanWrapper src = new BeanWrapperImpl(source);
-//		java.beans.PropertyDescriptor[] pds = src.getPropertyDescriptors();
-//
-//		Set<String> emptyNames = new HashSet<String>();
-//		for (java.beans.PropertyDescriptor pd : pds) {
-//			Object srcValue = src.getPropertyValue(pd.getName());
-//			if (srcValue == null)
-//				emptyNames.add(pd.getName());
-//		}
-//		String[] result = new String[emptyNames.size()];
-//		return emptyNames.toArray(result);
-//	}
-
-	@PutMapping(value = "/employees/{employeeId}")
-	public ResponseEntity<Employee> updateEmployee(@PathVariable Integer employeeId,
-			@RequestBody Employee employee) {
-
-		return employeeRepository.findById(employeeId).map(editedEmployee -> {
+	@PutMapping(value = "/employees")
+	@ResponseBody
+	public ResponseEntity<Employee> updateEmployee(@RequestParam String username, @RequestBody Employee employee) {
+		return employeeRepository.findByUsername(username).map(editedEmployee -> {
 			editedEmployee.setEmail(employee.getEmail());
 			editedEmployee.setFirstName(employee.getFirstName());
 			editedEmployee.setGender(Gender.getEnumFromValue(employee.getGender()));
@@ -99,28 +85,16 @@ public class EmployeeController {
 			editedEmployee.setUsername(employee.getUsername());
 			employeeRepository.save(editedEmployee);
 			return ResponseEntity.ok(editedEmployee);
-		}).orElseThrow(() -> new ResourceNotFoundException(ErrorMessage.EMPLOYEE_NOT_FOUND.getValue() + employeeId));
+		}).orElseThrow(() -> new ResourceNotFoundException(ErrorMessage.EMPLOYEE_NOT_FOUND.getValue() + username));
 
 	}
-	
 
-	
-//	@PutMapping(value = "/employees/{employeeId}")
-//	public ResponseEntity<?> updateEmployee(@PathVariable Integer employeeId, @RequestBody Employee employee) {
-//		employee.setEmployeeId(employeeId);
-//		Optional<Employee> editedEmployee = employeeService.updateEmployee(employee);
-//		editedEmployee.get().setEmployeeId(employeeId);
-//		employeeRepository.save(editedEmployee);
-//		return ResponseEntity.ok().body(editedEmployee);
-//	}
-
-	@DeleteMapping(value = "/employees/{employeeId}")
-	public ResponseEntity<?> deleteEmployee(@PathVariable Integer employeeId) {
-		return employeeRepository.findById(employeeId).map(employee -> {
+	@DeleteMapping(value = "/employees")
+	public ResponseEntity<?> deleteEmployee(@RequestParam String username) {
+		return employeeRepository.findByUsername(username).map(employee -> {
 			employeeRepository.delete(employee);
 			return ResponseEntity.ok().build();
-		}).orElseThrow(() -> new ResourceNotFoundException(ErrorMessage.EMPLOYEE_NOT_FOUND.getValue() + employeeId));
-
+		}).orElseThrow(() -> new ResourceNotFoundException(ErrorMessage.EMPLOYEE_NOT_FOUND.getValue() + username));
 	}
 
 }

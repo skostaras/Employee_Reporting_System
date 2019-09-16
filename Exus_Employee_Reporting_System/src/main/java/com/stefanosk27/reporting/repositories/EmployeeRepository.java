@@ -10,9 +10,11 @@ import com.stefanosk27.reporting.domain.Employee;
 
 public interface EmployeeRepository extends JpaRepository<Employee, Integer>{
 	
-	Optional<Employee> findByUsername(String username);
+//	Optional<Employee> findByUsername(String username);
 	
-//	Page<Employee> findByUsername(String username, Pageable pageable);
+	Page<Employee> findByUsername(String username, Pageable pageable);
+	
+	Optional<Employee> findByUsername(String username);
 
 //	void save(Optional<Employee> editedEmployee);
 
