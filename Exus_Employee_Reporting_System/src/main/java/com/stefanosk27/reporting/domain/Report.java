@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -15,6 +17,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.stefanosk27.reporting.Gender;
 import com.stefanosk27.reporting.Priority;
 
 @Table(name = "Report")
@@ -22,27 +25,45 @@ import com.stefanosk27.reporting.Priority;
 public class Report implements Serializable {
 
 	private static final long serialVersionUID = -9006913712525503650L;
-	
+
 	@Id
 	@GeneratedValue
-	@Column(name="ReportId", updatable = false)
+	@Column(name = "ReportId", updatable = false)
 	private Integer reportId;
-	
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "employeeId", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonIgnore
-    private Employee employee;
-	
-	@Column(name="Title", nullable = false)
+
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "EmployeeId", nullable = false)
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	@JsonIgnore
+	private Employee employee;
+
+	@Column(name = "Title", nullable = false)
 	private String title;
 
-	@Column(name="Description", nullable = false)
+	@Column(name = "Description", nullable = false)
 	private String description;
-	
-	@Column(name="Priority", nullable = false)
-	private Priority priority;
-	
+
+	@Column(name = "Priority", nullable = false)
+//    @Enumerated(EnumType.STRING)
+	private String priority;
+
+	public Report(Integer reportId, Employee employee, String title, String description, String priority) {
+		super();
+		this.reportId = reportId;
+		this.employee = employee;
+		this.title = title;
+		this.description = description;
+		this.priority = priority;
+	}
+
+	public Report() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public void setReportId(Integer reportId) {
+		this.reportId = reportId;
+	}
 
 	public Integer getReportId() {
 		return reportId;
@@ -72,14 +93,17 @@ public class Report implements Serializable {
 		this.description = description;
 	}
 
-	public Priority getPriority() {
+	public String getPriority() {
 		return priority;
 	}
 
 	public void setPriority(Priority priority) {
-		this.priority = priority;
+		if (priority != null) {
+			this.priority = priority.getPriorityValue();
+		} else {
+			this.priority = null;
+		}
+
 	}
-	
-	
 
 }

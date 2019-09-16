@@ -4,6 +4,8 @@ import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -34,11 +36,15 @@ public class Employee implements Serializable {
 	private String email;
 	
 	@Column(name="gender", nullable = true)
-	private Gender gender;
+//    @Enumerated(EnumType.STRING)
+	private String gender;
 	
 	@Column(name="title", nullable = true)
 	private String title;
 	
+	public void setEmployeeId(Integer employeeId) {
+		this.employeeId = employeeId;
+	}
 
 	public Integer getEmployeeId() {
 		return employeeId;
@@ -76,12 +82,17 @@ public class Employee implements Serializable {
 		this.email = email;
 	}
 
-	public Gender getGender() {
+	public String getGender() {
 		return gender;
 	}
 
 	public void setGender(Gender gender) {
-		this.gender = gender;
+		if (gender != null) {
+			this.gender = gender.getGenderValue();
+		} else {
+			this.gender = null;
+		}
+
 	}
 
 	public String getTitle() {
@@ -91,9 +102,37 @@ public class Employee implements Serializable {
 	public void setTitle(String title) {
 		this.title = title;
 	}
+
+	public Employee(Integer employeeId, String firstName, String lastName, String username, String email, String gender,
+			String title) {
+		super();
+		this.employeeId = employeeId;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.username = username;
+		this.email = email;
+		this.gender = gender;
+		this.title = title;
+	}
+	
+    public Employee(Employee employee) {
+        this.firstName = employee.getFirstName();
+        this.lastName = employee.getLastName();
+        this.username = employee.getUsername();
+        this.email = employee.getEmail();
+        this.gender = employee.getGender();
+        this.title = employee.getTitle();
+    }
+
+	public Employee() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+    
+    
 	
 	
 	
-	
+		
 
 }

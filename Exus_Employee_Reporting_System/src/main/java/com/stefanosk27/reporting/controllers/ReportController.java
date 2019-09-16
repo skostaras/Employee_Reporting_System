@@ -22,6 +22,14 @@ import com.stefanosk27.reporting.domain.Report;
 import com.stefanosk27.reporting.repositories.EmployeeRepository;
 import com.stefanosk27.reporting.repositories.ReportRepository;
 
+//import com.stefanosk27.reporting.ErrorMessage;
+//import com.stefanosk27.reporting.Priority;
+//import com.stefanosk27.reporting.ResourceNotFoundException;
+//import com.stefanosk27.reporting.domain.Employee;
+//import com.stefanosk27.reporting.domain.Report;
+//import com.stefanosk27.reporting.repositories.EmployeeRepository;
+//import com.stefanosk27.reporting.repositories.ReportRepository;
+
 @RestController
 public class ReportController {
 
@@ -31,14 +39,23 @@ public class ReportController {
 	@Autowired
 	private ReportRepository reportRepository;
 
-	@GetMapping(value = "/employees/{employeeId}/reports")
-	public Page<Report> findByEmployeeId(@PathVariable Integer employeeId, Pageable pageable) {
-		return reportRepository.findByEmployeeId(employeeId, pageable);
-	}
+//	@GetMapping(value = "/employees/{employeeId}/reports")
+//	public Page<Report> findByEmployeeId(@PathVariable Integer employeeId, Pageable pageable) {
+//		return reportRepository.findByEmployeeId(employeeId, pageable);
+//	}
 
 	@GetMapping(value = "/employees/reports/{priority}")
-	public Page<Report> findByPriority(@PathVariable Priority priority, Pageable pageable) {
-		return reportRepository.findByPriority(priority, pageable);
+	public Report findByPriority(@PathVariable String priority) {
+		if(priority.toLowerCase().equals("low")){
+			priority = "Low";
+		}
+		if(priority.toLowerCase().equals("high")){
+			priority = "High";
+		}
+//		public Page<Report> findByPriority(@PathVariable String priority, Pageable pageable) {
+//		return reportRepository.findByPriority(Priority.getEnumFromValue(priority), pageable);
+//		return reportRepository.findByPriority(priority, pageable);
+		return reportRepository.findByPriority(priority);
 	}
 
 	@PostMapping(value = "/employees/{employeeId}/reports")
