@@ -16,6 +16,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.stefanosk27.reporting.Gender;
 import com.stefanosk27.reporting.Priority;
@@ -30,12 +31,18 @@ public class Report implements Serializable {
 	@GeneratedValue
 	@Column(name = "ReportId", updatable = false)
 	private Integer reportId;
+	
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="username", referencedColumnName = "username")
+    @JsonBackReference
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Employee employee;
 
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "username", nullable = false)
-	@OnDelete(action = OnDeleteAction.CASCADE)
-//	@JsonIgnore
-	private Employee employee;
+//	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+//	@JoinColumn(name = "username", nullable = false)
+//	@OnDelete(action = OnDeleteAction.CASCADE)
+////	@JsonIgnore
+//	private Employee employee;
 
 	@Column(name = "Title", nullable = false)
 	private String title;

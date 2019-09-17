@@ -1,12 +1,7 @@
 package com.stefanosk27.reporting.controllers;
 
-import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
 
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.BeanWrapper;
-import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,16 +23,12 @@ import com.stefanosk27.reporting.ResourceNotFoundException;
 import com.stefanosk27.reporting.StorageFailedException;
 import com.stefanosk27.reporting.domain.Employee;
 import com.stefanosk27.reporting.repositories.EmployeeRepository;
-import com.stefanosk27.reporting.services.EmployeeService;
 
 @RestController
 public class EmployeeController {
 
 	@Autowired
 	EmployeeRepository employeeRepository;
-
-	@Autowired
-	private EmployeeService employeeService;
 
 	@GetMapping(value = "/employees/all")
 	public Page<Employee> all(Pageable pageable) {
@@ -65,24 +55,23 @@ public class EmployeeController {
 	@ResponseStatus(code = HttpStatus.CREATED)
 	public Employee save(@RequestBody Employee employee) {
 		Optional<Employee> searchResults = employeeRepository.findByUsername(employee.getUsername());
-		
-		if(searchResults.isPresent())
+
+		if (searchResults.isPresent())
 			throw new StorageFailedException(employee.getUsername() + ErrorMessage.USERNAME_EXISTS.getValue());
-		
-		
+
 		return employeeRepository.save(employee);
 	}
 
 	@PutMapping(value = "/employees")
 	@ResponseBody
-	public ResponseEntity<Employee> updateEmployee(@RequestParam String username, @RequestBody Employee employee) {
+	public ResponseEntity<Employee> updateEmployee(@RequestParam String username, @RequestBody Employee employeeFromRequest) {
 		return employeeRepository.findByUsername(username).map(editedEmployee -> {
-			editedEmployee.setEmail(employee.getEmail());
-			editedEmployee.setFirstName(employee.getFirstName());
-			editedEmployee.setGender(Gender.getEnumFromValue(employee.getGender()));
-			editedEmployee.setLastName(employee.getLastName());
-			editedEmployee.setTitle(employee.getTitle());
-			editedEmployee.setUsername(employee.getUsername());
+			editedEmployee.setEmail(employeeFromRequest.getEmail());
+			editedEmployee.setFirstName(employeeFromRequest.getFirstName());
+			editedEmployee.setGender(Gender.getEnumFromValue(employeeFromRequest.getGender()));
+			editedEmployee.setLastName(employeeFromRequest.getLastName());
+			editedEmployee.setTitle(employeeFromRequest.getTitle());
+			editedEmployee.setUsername(employeeFromRequest.getUsername());
 			employeeRepository.save(editedEmployee);
 			return ResponseEntity.ok(editedEmployee);
 		}).orElseThrow(() -> new ResourceNotFoundException(ErrorMessage.EMPLOYEE_NOT_FOUND.getValue() + username));
