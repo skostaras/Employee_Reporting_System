@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -15,14 +16,14 @@ import org.hibernate.annotations.OnDeleteAction;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.stefanosk27.reporting.enums.Priority;
 
-@Table(name = "Report")
+@Table(name = "Reports")
 @Entity
 public class Report implements Serializable {
 
 	private static final long serialVersionUID = -9006913712525503650L;
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ReportId", updatable = false)
 	private Integer reportId;
 

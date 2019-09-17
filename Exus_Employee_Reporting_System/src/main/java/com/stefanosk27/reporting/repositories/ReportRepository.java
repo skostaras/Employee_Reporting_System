@@ -9,10 +9,10 @@ import com.stefanosk27.reporting.domain.Report;
 
 public interface ReportRepository extends JpaRepository<Report, Integer> {
 
-	@Query(value = "SELECT * FROM Report WHERE priority = ?1", countQuery = "SELECT count(*) FROM Report WHERE priority = ?1", nativeQuery = true)
+	@Query(value = "SELECT * FROM Reports WHERE priority = ?1", countQuery = "SELECT count(*) FROM Reports WHERE priority = ?1", nativeQuery = true)
 	Page<Report> findByPriority(String priority, Pageable pageable);
 
-	@Query(value = "SELECT * FROM Report WHERE username = ?1", countQuery = "SELECT count(*) FROM Report WHERE username = ?1", nativeQuery = true)
+	@Query(value = "SELECT * FROM Reports WHERE username = ?1", countQuery = "SELECT count(*) FROM Reports WHERE username = ?1", nativeQuery = true)
 	Page<Report> findByEmployeeUsername(String username, Pageable pageable);
 
 }

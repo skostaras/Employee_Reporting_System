@@ -5,19 +5,20 @@ import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.stefanosk27.reporting.enums.Gender;
 
-@Table(name = "Employee")
+@Table(name = "Employees")
 @Entity
 public class Employee implements Serializable {
 
 	private static final long serialVersionUID = 1776083447142151459L;
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "EmployeeId", updatable = false)
 	private Integer employeeId;
 
