@@ -1,4 +1,4 @@
-# Employee_Reporting_System
+# Employee Reporting System
 A simple REST API application that stores and retrieves employees' reports. 
 
 The application is built with Spring Boot and uses MySQL. First create an "EmployeeReportingSystem" schema (or run the included SQL).
