@@ -1,4 +1,4 @@
-package com.stefanosk27.reporting;
+package com.stefanosk27.reporting.customExceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

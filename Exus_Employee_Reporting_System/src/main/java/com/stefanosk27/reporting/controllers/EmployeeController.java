@@ -17,11 +17,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.stefanosk27.reporting.ErrorMessage;
-import com.stefanosk27.reporting.Gender;
-import com.stefanosk27.reporting.ResourceNotFoundException;
-import com.stefanosk27.reporting.StorageFailedException;
+import com.stefanosk27.reporting.customExceptions.ResourceNotFoundException;
+import com.stefanosk27.reporting.customExceptions.StorageFailedException;
 import com.stefanosk27.reporting.domain.Employee;
+import com.stefanosk27.reporting.enums.ErrorMessage;
+import com.stefanosk27.reporting.enums.Gender;
 import com.stefanosk27.reporting.repositories.EmployeeRepository;
 
 @RestController
@@ -54,8 +54,8 @@ public class EmployeeController {
 	@PostMapping(value = "/employees")
 	@ResponseStatus(code = HttpStatus.CREATED)
 	public Employee save(@RequestBody Employee employee) {
-		Optional<Employee> searchResults = employeeRepository.findByUsername(employee.getUsername());
 
+		Optional<Employee> searchResults = employeeRepository.findByUsername(employee.getUsername());
 		if (searchResults.isPresent())
 			throw new StorageFailedException(employee.getUsername() + ErrorMessage.USERNAME_EXISTS.getValue());
 
@@ -64,7 +64,8 @@ public class EmployeeController {
 
 	@PutMapping(value = "/employees")
 	@ResponseBody
-	public ResponseEntity<Employee> updateEmployee(@RequestParam String username, @RequestBody Employee employeeFromRequest) {
+	public ResponseEntity<Employee> updateEmployee(@RequestParam String username,
+			@RequestBody Employee employeeFromRequest) {
 		return employeeRepository.findByUsername(username).map(editedEmployee -> {
 			editedEmployee.setEmail(employeeFromRequest.getEmail());
 			editedEmployee.setFirstName(employeeFromRequest.getFirstName());
@@ -75,7 +76,6 @@ public class EmployeeController {
 			employeeRepository.save(editedEmployee);
 			return ResponseEntity.ok(editedEmployee);
 		}).orElseThrow(() -> new ResourceNotFoundException(ErrorMessage.EMPLOYEE_NOT_FOUND.getValue() + username));
-
 	}
 
 	@DeleteMapping(value = "/employees")

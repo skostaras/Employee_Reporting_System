@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,12 +17,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.stefanosk27.reporting.ErrorMessage;
-import com.stefanosk27.reporting.Gender;
-import com.stefanosk27.reporting.Priority;
-import com.stefanosk27.reporting.ResourceNotFoundException;
+import com.stefanosk27.reporting.customExceptions.ResourceNotFoundException;
 import com.stefanosk27.reporting.domain.Employee;
 import com.stefanosk27.reporting.domain.Report;
+import com.stefanosk27.reporting.enums.ErrorMessage;
+import com.stefanosk27.reporting.enums.Priority;
 import com.stefanosk27.reporting.repositories.EmployeeRepository;
 import com.stefanosk27.reporting.repositories.ReportRepository;
 
@@ -52,6 +50,7 @@ public class ReportController {
 
 	@GetMapping(value = "/employees/reports")
 	public Page<Report> findByPriority(@RequestParam String priority, Pageable pageable) {
+
 		if (priority.toLowerCase().equals("low"))
 			priority = "Low";
 
@@ -64,26 +63,11 @@ public class ReportController {
 	@PostMapping(value = "/employees/reports")
 	@ResponseStatus(code = HttpStatus.CREATED)
 	public Report save(@RequestParam String username, @RequestBody Report report) {
-
 		return employeeRepository.findByUsername(username).map(employee -> {
 			report.setEmployee(employee);
 			return reportRepository.save(report);
 		}).orElseThrow(() -> new ResourceNotFoundException(ErrorMessage.EMPLOYEE_NOT_FOUND.getValue() + username));
 	}
-	
-//    public Optional<Report> updateReport(Report report){
-//        return Optional.of(reportRepository
-//        .findById(report.getReportId()))
-//        .filter(Optional::isPresent)
-//        .map(Optional::get)
-//        .map(updatedReport -> {
-//            updatedReport.setTitle(report.getTitle());
-//            updatedReport.setDescription(report.getDescription());
-//            updatedReport.setPriority(report.getPriority());
-//            updatedReport.setEmployee(report.getEmployee());
-//            return updatedReport;
-//        }).map(Report::new);
-//    }
 
 	@PutMapping(value = "/employees/reports")
 	@ResponseBody

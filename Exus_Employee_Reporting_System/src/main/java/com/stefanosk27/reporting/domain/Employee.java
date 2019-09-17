@@ -1,47 +1,69 @@
 package com.stefanosk27.reporting.domain;
+
 import java.io.Serializable;
-import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import com.stefanosk27.reporting.Gender;
+import com.stefanosk27.reporting.enums.Gender;
 
 @Table(name = "Employee")
 @Entity
 public class Employee implements Serializable {
 
 	private static final long serialVersionUID = 1776083447142151459L;
-	
+
 	@Id
 	@GeneratedValue
-	@Column(name="EmployeeId", updatable = false)
+	@Column(name = "EmployeeId", updatable = false)
 	private Integer employeeId;
-	
-	@Column(name="FirstName", nullable = false)
+
+	@Column(name = "FirstName", nullable = false)
 	private String firstName;
-	
-	@Column(name="LastName", nullable = false)
+
+	@Column(name = "LastName", nullable = false)
 	private String lastName;
-	
-	@Column(name="username", nullable = false)
+
+	@Column(name = "username", nullable = false)
 	private String username;
-	
-	@Column(name="email", nullable = false)
+
+	@Column(name = "email", nullable = false)
 	private String email;
-	
-	@Column(name="gender", nullable = true)
-//    @Enumerated(EnumType.STRING)
+
+	@Column(name = "gender", nullable = true)
 	private String gender;
-	
-	@Column(name="title", nullable = true)
+
+	@Column(name = "title", nullable = true)
 	private String title;
-	
+
+	public Employee(Integer employeeId, String firstName, String lastName, String username, String email, String gender,
+			String title) {
+		super();
+		this.employeeId = employeeId;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.username = username;
+		this.email = email;
+		this.gender = gender;
+		this.title = title;
+	}
+
+	public Employee(Employee employee) {
+		this.firstName = employee.getFirstName();
+		this.lastName = employee.getLastName();
+		this.username = employee.getUsername();
+		this.email = employee.getEmail();
+		this.gender = employee.getGender();
+		this.title = employee.getTitle();
+	}
+
+	public Employee() {
+		super();
+	}
+
 	public void setEmployeeId(Integer employeeId) {
 		this.employeeId = employeeId;
 	}
@@ -92,7 +114,6 @@ public class Employee implements Serializable {
 		} else {
 			this.gender = null;
 		}
-
 	}
 
 	public String getTitle() {
@@ -102,37 +123,5 @@ public class Employee implements Serializable {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-
-	public Employee(Integer employeeId, String firstName, String lastName, String username, String email, String gender,
-			String title) {
-		super();
-		this.employeeId = employeeId;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.username = username;
-		this.email = email;
-		this.gender = gender;
-		this.title = title;
-	}
-	
-    public Employee(Employee employee) {
-        this.firstName = employee.getFirstName();
-        this.lastName = employee.getLastName();
-        this.username = employee.getUsername();
-        this.email = employee.getEmail();
-        this.gender = employee.getGender();
-        this.title = employee.getTitle();
-    }
-
-	public Employee() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-    
-    
-	
-	
-	
-		
 
 }

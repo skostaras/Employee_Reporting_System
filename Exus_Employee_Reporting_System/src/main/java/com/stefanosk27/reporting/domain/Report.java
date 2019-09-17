@@ -4,22 +4,16 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.stefanosk27.reporting.Gender;
-import com.stefanosk27.reporting.Priority;
+import com.stefanosk27.reporting.enums.Priority;
 
 @Table(name = "Report")
 @Entity
@@ -31,18 +25,12 @@ public class Report implements Serializable {
 	@GeneratedValue
 	@Column(name = "ReportId", updatable = false)
 	private Integer reportId;
-	
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="username", referencedColumnName = "username")
-    @JsonBackReference
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private Employee employee;
 
-//	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-//	@JoinColumn(name = "username", nullable = false)
-//	@OnDelete(action = OnDeleteAction.CASCADE)
-////	@JsonIgnore
-//	private Employee employee;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "username", referencedColumnName = "username")
+	@JsonBackReference
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	private Employee employee;
 
 	@Column(name = "Title", nullable = false)
 	private String title;
@@ -51,7 +39,6 @@ public class Report implements Serializable {
 	private String description;
 
 	@Column(name = "Priority", nullable = false)
-//    @Enumerated(EnumType.STRING)
 	private String priority;
 
 	public Report(Integer reportId, Employee employee, String title, String description, String priority) {
@@ -65,7 +52,6 @@ public class Report implements Serializable {
 
 	public Report() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public void setReportId(Integer reportId) {
@@ -110,7 +96,6 @@ public class Report implements Serializable {
 		} else {
 			this.priority = null;
 		}
-
 	}
 
 }

@@ -8,18 +8,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.stefanosk27.reporting.domain.Employee;
 
-public interface EmployeeRepository extends JpaRepository<Employee, Integer>{
-	
-//	Optional<Employee> findByUsername(String username);
-	
+public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
+
 	Page<Employee> findByUsername(String username, Pageable pageable);
-	
+
 	Optional<Employee> findByUsername(String username);
-	
-
-//	void save(Optional<Employee> editedEmployee);
-
-//	void save(Optional<Employee> storedEmployee, Integer employeeId);
-	
 
 }
