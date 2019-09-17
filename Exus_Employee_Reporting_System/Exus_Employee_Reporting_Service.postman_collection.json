@@ -1,0 +1,386 @@
+{
+	"info": {
+		"_postman_id": "e2b6f45a-7c8e-4ff0-a762-27fac885713e",
+		"name": "Exus_Employee_Reporting_Service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "add new employee",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"firstName\": \"Stefanos\",\n\t\"lastName\": \"Kostaras\",\n\t\"username\": \"skostaras1\",\n\t\"email\": \"stefanoskostaras@hotmail.com\",\n\t\"gender\": \"MALE\",\n\t\"title\": \"Developer\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8088/employeeReportsSystem/employees/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8088",
+					"path": [
+						"employeeReportsSystem",
+						"employees",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "find all employees",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8088/employeeReportsSystem/employees/all?size=10",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8088",
+					"path": [
+						"employeeReportsSystem",
+						"employees",
+						"all"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "size",
+							"value": "10"
+						},
+						{
+							"key": "sort",
+							"value": "username,asc",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "find employee by username",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8088/employeeReportsSystem/employees?username=skostaras1&size=10",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8088",
+					"path": [
+						"employeeReportsSystem",
+						"employees"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "skostaras1"
+						},
+						{
+							"key": "size",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update an employee",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"firstName\": \"Stefanos\",\n\t\"lastName\": \"Kostaras\",\n\t\"username\": \"skostaras1\",\n\t\"email\": \"stefanoskostaras@hotmail.com\",\n\t\"gender\": \"MALE\",\n\t\"title\": \"Software Developer\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8088/employeeReportsSystem/employees?username=skostaras1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8088",
+					"path": [
+						"employeeReportsSystem",
+						"employees"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "skostaras1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete an employee & all his reports",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8088/employeeReportsSystem/employees?username=skostaras1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8088",
+					"path": [
+						"employeeReportsSystem",
+						"employees"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "skostaras1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add new report for employee",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\": \"a new report\",\n    \"description\": \"Quality Report\",\n    \"priority\": \"LOW\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8088/employeeReportsSystem/employees/reports?username=skostaras1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8088",
+					"path": [
+						"employeeReportsSystem",
+						"employees",
+						"reports"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "skostaras1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "find reports by employee",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8088/employeeReportsSystem/employees/reports/employee?username=skostaras1&size=10",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8088",
+					"path": [
+						"employeeReportsSystem",
+						"employees",
+						"reports",
+						"employee"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "skostaras1"
+						},
+						{
+							"key": "page",
+							"value": null,
+							"disabled": true
+						},
+						{
+							"key": "size",
+							"value": "10"
+						},
+						{
+							"key": "sort",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "find reports by priority",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8088/employeeReportsSystem/employees/reports?priority=low&size=10",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8088",
+					"path": [
+						"employeeReportsSystem",
+						"employees",
+						"reports"
+					],
+					"query": [
+						{
+							"key": "priority",
+							"value": "low"
+						},
+						{
+							"key": "page",
+							"value": "10",
+							"disabled": true
+						},
+						{
+							"key": "size",
+							"value": "10"
+						},
+						{
+							"key": "sort",
+							"value": "title,asc",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update a report",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\": \"NEW EDITED report\",\n    \"description\": \"Quality Report\",\n    \"priority\": \"LOW\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8088/employeeReportsSystem/employees/reports?username=skostaras1&reportId=2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8088",
+					"path": [
+						"employeeReportsSystem",
+						"employees",
+						"reports"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "skostaras1"
+						},
+						{
+							"key": "reportId",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete a single report",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8088/employeeReportsSystem/employees/reports?username=skostaras1&reportId=2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8088",
+					"path": [
+						"employeeReportsSystem",
+						"employees",
+						"reports"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "skostaras1"
+						},
+						{
+							"key": "reportId",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
